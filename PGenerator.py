@@ -2,6 +2,9 @@ import pandas as pd
 from Drawer import Drawer
 import os
 from datetime import datetime
+import tkinter as tk
+from tkinter import filedialog, messagebox, Tk
+import customtkinter
 
 class PGenerator:
 
@@ -69,6 +72,9 @@ class PGenerator:
             self.current_student = str(student_index) + ' - ' + str(self.student_id)
             #self.student_name = self.xuanke_excel.iloc[student_index]["姓名"]
 
+            # 当前学生是否有问题的状态
+            problem = False
+
             try:
                 self.student_name = str(
                     self.read.student_idname[self.read.student_idname['学号'] == self.student_id]['姓名'].tolist()[0])
@@ -100,6 +106,7 @@ class PGenerator:
                     math_slot = course_index + 1
                     break
 
+
             # print("math_slot" + str(math_slot))
 
             #获取年级
@@ -120,15 +127,20 @@ class PGenerator:
 
             # 根据绑定修改课表信息
             for math_bind_index in range(len(self.read.math_bind)):
-                if (int(self.read.math_bind["Slot"][math_bind_index][5:6]) == math_slot):
+                if (int(self.read.math_bind["SlotOfMath"][math_bind_index][5:6]) == math_slot):
+                    print(f'数学: {math_bind_index} 体育: {slot_classes[int(self.read.math_bind["SlotOfPHE"][math_bind_index][5:6]) - 1]}')
+                    if(slot_classes[int(self.read.math_bind["SlotOfPHE"][math_bind_index][5:6]) - 1] != 'PE'):
+                        messagebox.showinfo("提示", f"当前学生选课体育课错误: {self.current_student}")
+                        problem = True
+                        break
 
                     self.kebiao_df.loc[
                         int(self.read.math_bind["Mathbind1"][math_bind_index][3:4]) - 1,
-                        self.read.math_bind["Mathbind1"][math_bind_index][0:3]] = self.read.math_bind["Slot"][math_bind_index]
+                        self.read.math_bind["Mathbind1"][math_bind_index][0:3]] = self.read.math_bind["SlotOfMath"][math_bind_index]
 
                     self.kebiao_df.loc[
                         int(self.read.math_bind["Mathbind2"][math_bind_index][3:4]) - 1,
-                        self.read.math_bind["Mathbind2"][math_bind_index][0:3]] = self.read.math_bind["Slot"][
+                        self.read.math_bind["Mathbind2"][math_bind_index][0:3]] = self.read.math_bind["SlotOfMath"][
                         math_bind_index]
 
                     self.kebiao_df.loc[
@@ -136,6 +148,9 @@ class PGenerator:
                         self.read.math_bind["Counseling"][math_bind_index][0:3]] = grade + " Counseling " + counseling_cate
 
                     break
+
+            if(problem):
+                continue
 
             # 填补None为体育
             self.kebiao_df = self.kebiao_df.fillna("PE")

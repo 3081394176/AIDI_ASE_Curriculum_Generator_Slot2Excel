@@ -98,7 +98,7 @@ class Drawer:
         my_style = NamedStyle(name="custom_style")
         my_style.font = Font(name=font_name, size=22, bold=False)
         my_style.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-        side = Side(border_style='medium', color="000000")
+        side = Side(border_style='thin', color="000000")
         border = Border(left=side, right=side, top=side, bottom=side)
         my_style.border = border
 
@@ -121,13 +121,13 @@ class Drawer:
                     cell.value = str(self.kebiao_df[day][index + 1]) + '\n' + '(' + str(self.room_df[day][index + 1]) + ')'
                     cell.style = my_style
                     # 设置边框
-                    self.set_cell_border(cell, "medium")
+                    self.set_cell_border(cell, "thin")
 
                 cell = self.template_schedule_sheet[
                     f"{self.template_indexs[day][0]}{str(self.template_indexs[index][0])}"]
                 cell.value = str(self.kebiao_df[day][index]) + '\n' + '(' + str(self.room_df[day][index]) + ')'
                 cell.style = my_style
-                self.set_cell_border(cell, "medium")
+                self.set_cell_border(cell, "thin")
 
                 index += 2
 

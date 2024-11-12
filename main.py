@@ -7,7 +7,7 @@ from PGenerator import PGenerator
 
 import platform
 
-version = '1.0'
+version = '1.23'
 software_name = 'Cactus'
 
 class ASEScheduleGeneratorApp:
